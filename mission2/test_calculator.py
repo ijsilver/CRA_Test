@@ -12,6 +12,12 @@ def calc():
     return calc
 
 
+def test_singleton():
+    calc1 = Calculator()
+    calc2 = Calculator()
+    assert calc1 == calc2
+
+
 def test_get_point(calc):
     assert calc.get_point("monday") == 1
     assert calc.get_point("tuesday") == 1
