@@ -51,34 +51,40 @@ def set_players_info():
                 set_player_attend_info(parts[0], parts[1])
 
 
+def set_players_grade():
+    for player_name in players_dict:
+        players_dict[player_name]['point'] += get_bonus_reward(player_name)
+        players_dict[player_name]['grade'] = (
+            get_grade(players_dict[player_name]['point'])
+        )
+
+        print(
+            f"NAME : {player_name}, POINT : "
+            f"{players_dict[player_name]['point']}, GRADE : ",
+            end=""
+        )
+        print(players_dict[player_name]['grade'])
+
+
+def print_removed_players():
+    print("\nRemoved player")
+    print("==============")
+    for player_name in players_dict:
+        wed_cnt, sat_cnt, sun_cnt = (
+            [players_dict[player_name][day]
+             if day in players_dict[player_name] else 0
+             for day in ['wednesday', 'saturday', 'sunday']]
+        )
+        if (players_dict[player_name]['grade'] == "NORMAL" and
+                wed_cnt == 0 and sat_cnt + sun_cnt == 0):
+            print(player_name)
+
+
 def get_release_players():
     try:
         set_players_info()
-        for player_name in players_dict:
-            players_dict[player_name]['point'] += get_bonus_reward(player_name)
-            players_dict[player_name]['grade'] = (
-                get_grade(players_dict[player_name]['point'])
-            )
-
-            print(
-                f"NAME : {player_name}, POINT : "
-                f"{players_dict[player_name]['point']}, GRADE : ",
-                end=""
-            )
-            print(players_dict[player_name]['grade'])
-
-        print("\nRemoved player")
-        print("==============")
-        for player_name in players_dict:
-            wed_cnt, sat_cnt, sun_cnt = (
-                [players_dict[player_name][day]
-                 if day in players_dict[player_name] else 0
-                 for day in ['wednesday', 'saturday', 'sunday']]
-            )
-            if (players_dict[player_name]['grade'] == "NORMAL" and
-                    wed_cnt == 0 and sat_cnt + sun_cnt == 0):
-                print(player_name)
-
+        set_players_grade()
+        print_removed_players()
     except FileNotFoundError:
         print("파일을 찾을 수 없습니다.")
 
